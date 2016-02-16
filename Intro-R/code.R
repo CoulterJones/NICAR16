@@ -1,33 +1,10 @@
-#
-#                                       ____________________________
-#                                      !\_________________________/!\
-#                                      !!                         !! \
-#                                      !!C:\> GETTING STARTED     !!  \
-#                                      !!         WITH R          !!  !
-#                                      !!           ie            !!  !
-#                                      !!     HOW TO OVERCOME     !!  !
-#                                      !!        YOUR FEAR        !!  !
-#                                      !!            &            !!  !
-#                                      !!     LEARN TO LOVE R     !!  /
-#                                      !!_________________________!! /
-#                                      !/_________________________\!/
-#                                       __\_________________/__/!_  )
-#                                       !_______________________!/   )
-#                                       |________________________|  (__
-#                                       /oooo  oooo  oooo  oooo /!   _  )_
-#                                     /ooooooooooooooooooooooo/ /  (_)_(_)
-#                                    /ooooooooooooooooooooooo/ /    (o o)
-#                                   /o=_____________________/_/    ==\o/==
+#Notes from hands-on Intro to R sessions Saturday, March 12, 2016
+#NICAR 2016, Denver, CO
+#http://www.ire.org/events-and-training/event/2198/2402/
+#Amelia McNamara, 
+#Coulter Jones, coulter.jones@wsj.com
 
-
-#Notes from hands-on R class, June 5, 2015
-#IRE 2015, Philadelphia, PA
-#Ryann Grochowski Jones, ryann.jones@propublica.org
-#Coulter Jones, cjones@medpagetoday.com
-#Annie Waldman, annie.waldman@propublica.org
-
-#This file contains all the code shown at our hands-on session, plus some extras. This file is based on the excellent R primer Annie created for her NICAR2015 R classes!
-
+#This file contains all the code shown at our hands-on session, plus some extra details. 
 
 #TIME TO GET COMFORTABLE WITH R!
 
