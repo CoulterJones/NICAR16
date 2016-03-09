@@ -11,7 +11,6 @@ Coulter Jones, cjones@medpagetoday.com
 Amelia McNamara, amcnamara@smith.edu
 
 
-
 #### Some background info
 
 R has a bit of a learning curve but once you get used to it, you’re off to the races. Keep in mind you will get a ton of errors while you’re learning R — in fact, you’ll still deal with errors even if you’re a master user! Google is your friend — copy and paste the error into Google and see what others have written.
@@ -140,3 +139,74 @@ midwest %>% arrange(desc(percblack))
 
 2. What county has the largest American Indian population (in absolute numbers)?
 
+#### Loading Data
+Most of the time, you won't be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the **Environment** pane (upper right corner), the **Import Dataset** icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the **Console** showing how it was done.
+
+```{r}
+docs <- read.csv("~/Desktop/PartD_Providers_FORCLASS.csv", header = T)
+```
+
+To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer.  
+> Note: The way file directories are referenced in R varies between a Mac and PC. 
+MAC file directories follow this protocal use "~/file_location"
+PC versions would follow this: "C:\file_lcocation\"
+This is important to keep mind if someone shares code with you who uses a different operating system.
+
+Let's see what our data looks like to make sure it imported correctly. Remember, the `str()` command tells you the **str**ucture of your data.
+```{r}
+str(docs)
+```
+
+The data appears to have imported correctly for reach field. We can move on to some basic summary statistics.
+```{r}
+summary(docs)
+```
+
+Although interesting, let's really focus in one field:`COST_SUM`. `favstats`, which we used on the other data set will show the general flow.
+
+```{r}
+favstats(~COST_SUM, data=docs)
+```
+
+The `median` is significantly lower than the `mean` in this case, which may indicates some extreme outliers on the high cost end. Making a quick histogram might show that. 
+```{r}
+histogram(~COST_SUM, data = docs)
+```
+
+
+> ADDITIONAL CHARTING, EXPLORATORY TO ADD HERE BEFORE WE GET IN TO FILTERING
+
+
+#### Filtering data with DPLYR
+So far this is all interesting, but what if I'm only interested in doctors in Colorado. With the package `dplyr` we can do this with the `filter()` function, which works like this: 
+
+`filter(data, method you want to filter on)`
+
+To find only doctors from Colorado:
+
+```{r}
+filter(docs, STATE == "CO")
+```
+
+Using this function in this way, will simply print the results. We can also assign the results to a new dataframe.
+
+```{r}
+colorado_docs <- filter(docs, STATE == "CO")
+```
+
+You don't have to be limited by one variable. Earlier we looked at high prescribers. Perhaps, we'd like to do that just for Colorado doctors. We can use the `&` to
+
+```{r}
+filter(docs, STATE == "CO" & COST_SUM > 500000)
+```
+
+ > BOOLEANS review: In R we can use two types of Boolean characters 
+AND represented by &
+OR represented by |
+& limits our filter because both criteria must be met.
+| broadens our filter. If either criteria is met the data is included.
+The above code shows doctors just from Colorado who also exceeded $500,000 in costs. Below would give doctors who either are from Colorado or have a cost that exceeds $500,000 and could be from any state.
+
+```{r}
+filter(docs, STATE == "CO" & COST_SUM > 500000)
+```

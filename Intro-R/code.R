@@ -6,12 +6,6 @@
 
 #This file contains all the code shown at our hands-on session, plus some extra details. 
 
-#TIME TO GET COMFORTABLE WITH R!
-
-#R has a bit of a learning curve but once you get used to it, you’re off to the races. Keep in mind you will get a ton of errors while you’re learning R — in fact, you’ll still deal with errors even if you’re a master user! Google is your friend — copy and paste the error into Google and see what others have written.
-
-#PRO TIP: R is VERY VERY VERY case-sensitive. A misplaced capital letter or double-quote where there should be a single-quote might just be the culprit to your error.
-
 #And don’t forget — save EVERYTHING! RStudio allows you to save your data, your scripts, your history, your entire RStudio workspace — save it all and save often.
 
 #RStudio is a great interface to the R language. The interface has 4 panes. You’ll do your coding in the Console (lower left, looks like Terminal/command line). The Environment and History (upper left) panes keep track of all your data and commands. The Source pane is on the upper right and displays your data tables. The lower left pane does a bunch of stuff — holds files, displays the graphs you’ve made, shows the packages you have installed, and more.
@@ -66,7 +60,7 @@ help(mean)
 
 #Creating some data types
 #Remember you can use <- or = to assign values.
-x = c(1,2,3)
+x <- c(1,2,3)
 y = c("a","b","c")
 str(x)
 str(y)
@@ -75,7 +69,6 @@ str(y)
 objects()
 #or
 ls()
-
 #will print out all of your objects.
 
 rm(x)
@@ -103,10 +96,8 @@ class(y)
 ###Vector: simplest type of data structure, just an ordered collection of objects.
 
 #assigning a to a set of numbers with function c():
-?c
 
-a = c(10,20,30,40,50) 
-a
+
 
 #assigning b to a set of numbers with function c()
 b =  c(2,3,6,8,10) 
