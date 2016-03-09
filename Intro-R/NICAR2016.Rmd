@@ -1,12 +1,12 @@
 ---
-title: "Hand-on R class"
+title: "Hands-on R class"
 output: html_document
 ---
 
 #### Your instructors
 This file contains all the code from the NICAR 2016 hands-on R workshop. It was created by your instructors, 
 
-Coulter Jones, cjones@medpagetoday.com
+Coulter Jones, coulter.jones@wsj.com
 
 Amelia McNamara, amcnamara@smith.edu
 
@@ -52,17 +52,15 @@ help(mean)
 - UCLA Guide to R: [http://www.ats.ucla.edu/stat/r/sk/books_usingr.htm](http://www.ats.ucla.edu/stat/r/sk/books_usingr.htm)
 - Stack overflow: [http://stackoverflow.com/](http://stackoverflow.com/)
 
-
 #### Packages and syntax 
 
-R has "base" functionality that is built into the language, but most of the good stuff comes from user-written "packages" that extend the language. We'll be using the `mosaic` and `ggplot2` packages in this class, among others. Because R is open source (and was written by statisticians...) it has some strange features compared to other programming languages. The most obvious is that its syntax is not consistent. Almost any task you want to do, there are three ways to accomplish. And packages can contribute to this nonsense by providing their own syntax. We'll try to point to places where the code we are showing you is just one of many ways to do something, but know that when you start googling questions you may see things that don't look familiar. Don't be afraid!
+R has "base" functionality that is built into the language, but most of the good stuff comes from user-written "packages" that extend the language. We'll be using the `mosaic`, `ggplot2` and `dplyr` packages in this class, among others. Because R is open source (and was written by statisticians...) it has some strange features compared to other programming languages. The most obvious is that its syntax is not consistent. Almost any task you want to do, there are three ways to accomplish. And packages can contribute to this nonsense by providing their own syntax. We'll try to point to places where the code we are showing you is just one of many ways to do something, but know that when you start googling questions you may see things that don't look familiar. Don't be afraid!
 
 To use a package, you have to `require()` it. Lets start by requiring some packages:
 ```{r, message=FALSE, warning=FALSE}
 require(mosaic)
 require(ggplot2)
 ```
-
 
 #### Data!
 Later in this class, we will show you how to load in external data, but for now we are going to begin by playing with some data that comes with R. This will allow us to start playing quickly.
@@ -73,7 +71,7 @@ We'll start with some data about midwest demographics. To get started, you can r
 data(midwest)
 head(midwest)
 ```
-For a spreadsheet-like experience of your data, just click on its name in your Environment tab to see a preview of the data in the Source pane. Note that you can only look, you can't "touch." R is a programming language, so if you see values you want to have changed, or you need to add another variable based on an existing one you have to do so programmatically. 
+For a spreadsheet-like experience of your data, just click on its name in your `Environment` tab to see a preview of the data in the Source pane. Note that you can only look, you can't "touch." R is a programming language, so if you see values you want to have changed, or you need to add another variable based on an existing one you have to do so programmatically. 
 
 If you want to read about all the variables that are included in the dataset, you can run
 ```{r}
@@ -139,6 +137,8 @@ midwest %>% arrange(desc(percblack))
 
 2. What county has the largest American Indian population (in absolute numbers)?
 
+**More here? ** 
+
 #### Loading Data
 Most of the time, you won't be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the **Environment** pane (upper right corner), the **Import Dataset** icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the **Console** showing how it was done.
 
@@ -146,13 +146,14 @@ Most of the time, you won't be working with data sets available through packages
 docs <- read.csv("~/Desktop/PartD_Providers_FORCLASS.csv", header = T)
 ```
 
-To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer.  
+To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer. Check other functionality of `?read.csv` if you have questions
+
 > Note: The way file directories are referenced in R varies between a Mac and PC. 
-MAC file directories follow this protocal use "~/file_location"
+MAC file directories follow this protocol use "~/file_location"
 PC versions would follow this: "C:\file_lcocation\"
 This is important to keep mind if someone shares code with you who uses a different operating system.
 
-Let's see what our data looks like to make sure it imported correctly. Remember, the `str()` command tells you the **str**ucture of your data.
+Let's see what our data looks like to make sure it imported correctly. Remember, the `str()` command tells you the structure of your data.
 ```{r}
 str(docs)
 ```
@@ -162,7 +163,7 @@ The data appears to have imported correctly for reach field. We can move on to s
 summary(docs)
 ```
 
-Although interesting, let's really focus in one field:`COST_SUM`. `favstats`, which we used on the other data set will show the general flow.
+Although interesting, let's really focus in one field:*COST_SUM*. `favstats`, which we used on the other data set will show the general flow.
 
 ```{r}
 favstats(~COST_SUM, data=docs)
@@ -173,14 +174,55 @@ The `median` is significantly lower than the `mean` in this case, which may indi
 histogram(~COST_SUM, data = docs)
 ```
 
+There is plenty to work with for this data, but let's say we want to alter it slightly and calculate additional fields. If we type equations out, the **Console** wil return the results.
+```{r}
+2+4
+```
 
-> ADDITIONAL CHARTING, EXPLORATORY TO ADD HERE BEFORE WE GET IN TO FILTERING
+R follows standard mathematical order of operations **(PEMDAS)**. So, this:
+```{r}
+2+4*3^2
+```
+
+Will give us a different result than this.
+```{r}
+(2+4)*3^2
+```
+
+> Common R arithmetic functions
+Addition        +
+Substraction    -
+Multipication   *
+Division        /
+Exponents       ^
+
+As journalists, it's pretty rare to just be type out equations like that. However, it's not uncommon to use math on our existing data to create new fields. Take the **CLAIM_COUNT** and **BRAND_COUNT** fields. We know the total number of claims each doctor has approved and how many of those claims were filled with brand name drugs. We need to divide **BRAND_COUNT** by **CLAIM_COUNT**. We can use `mutate()` to create a field in our data called **BRAND_PCT** with this ratio.
+
+```{r}
+docs <- mutate(docs, BRAND_PCT = BRAND_COUNT/CLAIM_COUNT)
+```
+
+and `head()` and `str()` to take a look at the data field we just created.
+```{r}
+head(docs)
+
+str()
+```
+While the ratio is correct, we'd prefer to have it look more like a percentage by multiplying the ratio by 100. We can simply overwrite the existing data we just created.
+
+```{r}
+docs <- mutate(docs, BRAND_PCT = (BRAND_COUNT/CLAIM_COUNT)*100)
+
+head(docs)
+
+```
 
 
 #### Filtering data with DPLYR
-So far this is all interesting, but what if I'm only interested in doctors in Colorado. With the package `dplyr` we can do this with the `filter()` function, which works like this: 
-
-`filter(data, method you want to filter on)`
+Now this has been interesting, but in many cases we want to pull out specific pieces of our data. What if we're only interested in doctors in Colorado. We can do this with the `filter()` function, which is part of the `dplyr` package. Remember, if this is our first time using `dplyr` this sessione we  need to `require()` first.
+```{r}
+require(dplyr)
+```
 
 To find only doctors from Colorado:
 
@@ -188,13 +230,16 @@ To find only doctors from Colorado:
 filter(docs, STATE == "CO")
 ```
 
+
+`filter(data, method you want to filter on)`
+
 Using this function in this way, will simply print the results. We can also assign the results to a new dataframe.
 
 ```{r}
 colorado_docs <- filter(docs, STATE == "CO")
 ```
 
-You don't have to be limited by one variable. Earlier we looked at high prescribers. Perhaps, we'd like to do that just for Colorado doctors. We can use the `&` to
+You don't have to be limited by one variable. Earlier we looked at high-cost prescribers. Perhaps, we'd like to do that just for Colorado doctors. We can use the `&` to to look at all Colorado doctors who have
 
 ```{r}
 filter(docs, STATE == "CO" & COST_SUM > 500000)
@@ -206,7 +251,7 @@ OR represented by |
 & limits our filter because both criteria must be met.
 | broadens our filter. If either criteria is met the data is included.
 The above code shows doctors just from Colorado who also exceeded $500,000 in costs. Below would give doctors who either are from Colorado or have a cost that exceeds $500,000 and could be from any state.
-
 ```{r}
 filter(docs, STATE == "CO" & COST_SUM > 500000)
 ```
+  
