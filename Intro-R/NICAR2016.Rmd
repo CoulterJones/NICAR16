@@ -1,0 +1,257 @@
+---
+title: "Hands-on R class"
+output: html_document
+---
+
+#### Your instructors
+This file contains all the code from the NICAR 2016 hands-on R workshop. It was created by your instructors, 
+
+Coulter Jones, coulter.jones@wsj.com
+
+Amelia McNamara, amcnamara@smith.edu
+
+
+#### Some background info
+
+R has a bit of a learning curve but once you get used to it, you’re off to the races. Keep in mind you will get a ton of errors while you’re learning R — in fact, you’ll still deal with errors even if you’re a master user! Google is your friend — copy and paste the error into Google and see what others have written.
+
+> PRO TIP: R is VERY VERY VERY case-sensitive. A misplaced capital letter or double-quote where there should be a single-quote might just be the culprit to your error.
+
+And don’t forget — save EVERYTHING! RStudio allows you to save your data, your scripts, your history, your entire RStudio workspace — save it all and save often.
+
+#### RStudio 
+RStudio is a great interface to the R language. The interface has 4 panes. 
+
+You’ll do your coding in the **Console** (lower left, looks like Terminal/command line). 
+
+The **Environment and History** (upper right) panes keep track of everything you have loaded into your environment (mostly, data) and all the R commands you have ever typed. This is great because you can search through your past code to find commands you may have forgotten.  
+
+The **Source** pane is on the upper left and displays your data tables, as well as any documents you are reading or editing (maybe, you're looking at this document there!). 
+
+The **Files/Plots/Packages/Help/View** pane on the lower right does a bunch of stuff — holds files, displays the graphs you’ve made, shows the packages you have installed, and more. Perhaps the most important tab of that lower right pane is Help. R has two help functions. Forget what an average or mean is? Try this.
+
+```{r, eval=FALSE}
+?mean
+```
+or
+```{r, eval=FALSE}
+help(mean)
+```
+
+#### Looking for more help? 
+
+- The main R site: [http://cran.r-project.org/]( http://cran.r-project.org/) This has everything from guides to R updates. It also has a comprehensive list of packages and lots of great tips on how to use R. 
+- Official R Language Definition: [http://cran.r-project.org/doc/manuals/r-release/R-lang.html](http://cran.r-project.org/doc/manuals/r-release/R-lang.html)
+- An In-Depth Introduction to R: [http://cran.r-project.org/doc/contrib/usingR.pdf](http://cran.r-project.org/doc/contrib/usingR.pdf)
+- Using R for Intro Stats: [http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf](http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf)
+- Quick R: [http://www.statmethods.net/](http://www.statmethods.net/)
+- R Documentation Search: [http://www.rdocumentation.org/](http://www.rdocumentation.org/)
+- R-bloggers: find out awesome things people are doing with R [http://www.r-bloggers.com/](http://www.r-bloggers.com/)
+- Coursera Course on R: [https://www.coursera.org/course/rprog](https://www.coursera.org/course/rprog)
+- Princeton Guide to R: [http://libguides.princeton.edu/dss/R](http://libguides.princeton.edu/dss/R)
+- UCLA Guide to R: [http://www.ats.ucla.edu/stat/r/sk/books_usingr.htm](http://www.ats.ucla.edu/stat/r/sk/books_usingr.htm)
+- Stack overflow: [http://stackoverflow.com/](http://stackoverflow.com/)
+
+#### Packages and syntax 
+
+R has "base" functionality that is built into the language, but most of the good stuff comes from user-written "packages" that extend the language. We'll be using the `mosaic`, `ggplot2` and `dplyr` packages in this class, among others. Because R is open source (and was written by statisticians...) it has some strange features compared to other programming languages. The most obvious is that its syntax is not consistent. Almost any task you want to do, there are three ways to accomplish. And packages can contribute to this nonsense by providing their own syntax. We'll try to point to places where the code we are showing you is just one of many ways to do something, but know that when you start googling questions you may see things that don't look familiar. Don't be afraid!
+
+To use a package, you have to `require()` it. Lets start by requiring some packages:
+```{r, message=FALSE, warning=FALSE}
+require(mosaic)
+require(ggplot2)
+```
+
+#### Data!
+Later in this class, we will show you how to load in external data, but for now we are going to begin by playing with some data that comes with R. This will allow us to start playing quickly.
+
+We'll start with some data about midwest demographics. To get started, you can read the data in with the `data()` command, and see the first few rows with `head()`.
+
+```{r}
+data(midwest)
+head(midwest)
+```
+For a spreadsheet-like experience of your data, just click on its name in your `Environment` tab to see a preview of the data in the Source pane. Note that you can only look, you can't "touch." R is a programming language, so if you see values you want to have changed, or you need to add another variable based on an existing one you have to do so programmatically. 
+
+If you want to read about all the variables that are included in the dataset, you can run
+```{r}
+?midwest
+```
+or
+```{r}
+help(midwest)
+```
+
+A few more handy functions that have to do with datasets are `str()`, which tells you about the **str**ucture of your data,
+```{r}
+str(midwest)
+```
+and `summary()`, which provides a summary.
+```{r}
+summary(midwest)
+```
+
+You can also get the list of variable names using the `names()` function,
+```{r}
+names(midwest)
+```
+
+#### Plotting in R
+Now that we have data, we can begin doing Exploratory Data Analysis, making some plots to give us a sense of the relationships in the data.
+
+Here's how we can create a scatterplot:
+```{r}
+xyplot(popwhite~popblack, data=midwest)
+```
+
+#### Summary statistics
+Another part of exploratory data analysis is finding summary statistics. These work much the same way as plots. 
+
+```{r}
+mean(~popblack, data=midwest)
+```
+
+Other than `mean()` you can try `median()` `mode()` `min()` `max()` `sd()` and many more. Or, for a best-of function, try `favstats()`
+
+```{r}
+favstats(~popblack, data=midwest)
+```
+
+If you have two variables and want to see their relationship, you can feed most of these functions several arguments. For example,
+```{r}
+mean(popblack~inmetro, data=midwest)
+```
+
+1. Do metro areas have larger percentages of whites than rural areas? How do you know?
+
+#### Sorting and ordering
+Maybe we're working on a story about the county in the midwest that has the largest percentage of black people. We can use the `arrange()` function to see this.
+```{r}
+midwest %>% arrange(percblack)
+```
+
+But, this is sorting in increasing order, and we want in decreasing order. We could look in the documentation for `arrange()` to see how to change this.
+```{r}
+midwest %>% arrange(desc(percblack))
+```
+
+2. What county has the largest American Indian population (in absolute numbers)?
+
+**More here? ** 
+
+#### Loading Data
+Most of the time, you won't be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the **Environment** pane (upper right corner), the **Import Dataset** icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the **Console** showing how it was done.
+
+```{r}
+docs <- read.csv("~/Desktop/PartD_Providers_FORCLASS.csv", header = T)
+```
+
+To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer. Check other functionality of `?read.csv` if you have questions
+
+> Note: The way file directories are referenced in R varies between a Mac and PC. 
+MAC file directories follow this protocol use "~/file_location"
+PC versions would follow this: "C:\file_lcocation\"
+This is important to keep mind if someone shares code with you who uses a different operating system.
+
+Let's see what our data looks like to make sure it imported correctly. Remember, the `str()` command tells you the structure of your data.
+```{r}
+str(docs)
+```
+
+The data appears to have imported correctly for reach field. We can move on to some basic summary statistics.
+```{r}
+summary(docs)
+```
+
+Although interesting, let's really focus in one field:*COST_SUM*. `favstats`, which we used on the other data set will show the general flow.
+
+```{r}
+favstats(~COST_SUM, data=docs)
+```
+
+The `median` is significantly lower than the `mean` in this case, which may indicates some extreme outliers on the high cost end. Making a quick histogram might show that. 
+```{r}
+histogram(~COST_SUM, data = docs)
+```
+
+There is plenty to work with for this data, but let's say we want to alter it slightly and calculate additional fields. If we type equations out, the **Console** wil return the results.
+```{r}
+2+4
+```
+
+R follows standard mathematical order of operations **(PEMDAS)**. So, this:
+```{r}
+2+4*3^2
+```
+
+Will give us a different result than this.
+```{r}
+(2+4)*3^2
+```
+
+> Common R arithmetic functions
+Addition        +
+Substraction    -
+Multipication   *
+Division        /
+Exponents       ^
+
+As journalists, it's pretty rare to just be type out equations like that. However, it's not uncommon to use math on our existing data to create new fields. Take the **CLAIM_COUNT** and **BRAND_COUNT** fields. We know the total number of claims each doctor has approved and how many of those claims were filled with brand name drugs. We need to divide **BRAND_COUNT** by **CLAIM_COUNT**. We can use `mutate()` to create a field in our data called **BRAND_PCT** with this ratio.
+
+```{r}
+docs <- mutate(docs, BRAND_PCT = BRAND_COUNT/CLAIM_COUNT)
+```
+
+and `head()` and `str()` to take a look at the data field we just created.
+```{r}
+head(docs)
+
+str()
+```
+While the ratio is correct, we'd prefer to have it look more like a percentage by multiplying the ratio by 100. We can simply overwrite the existing data we just created.
+
+```{r}
+docs <- mutate(docs, BRAND_PCT = (BRAND_COUNT/CLAIM_COUNT)*100)
+
+head(docs)
+
+```
+
+
+#### Filtering data with DPLYR
+Now this has been interesting, but in many cases we want to pull out specific pieces of our data. What if we're only interested in doctors in Colorado. We can do this with the `filter()` function, which is part of the `dplyr` package. Remember, if this is our first time using `dplyr` this sessione we  need to `require()` first.
+```{r}
+require(dplyr)
+```
+
+To find only doctors from Colorado:
+
+```{r}
+filter(docs, STATE == "CO")
+```
+
+
+`filter(data, method you want to filter on)`
+
+Using this function in this way, will simply print the results. We can also assign the results to a new dataframe.
+
+```{r}
+colorado_docs <- filter(docs, STATE == "CO")
+```
+
+You don't have to be limited by one variable. Earlier we looked at high-cost prescribers. Perhaps, we'd like to do that just for Colorado doctors. We can use the `&` to to look at all Colorado doctors who have
+
+```{r}
+filter(docs, STATE == "CO" & COST_SUM > 500000)
+```
+
+ > BOOLEANS review: In R we can use two types of Boolean characters 
+AND represented by &
+OR represented by |
+& limits our filter because both criteria must be met.
+| broadens our filter. If either criteria is met the data is included.
+The above code shows doctors just from Colorado who also exceeded $500,000 in costs. Below would give doctors who either are from Colorado or have a cost that exceeds $500,000 and could be from any state.
+```{r}
+filter(docs, STATE == "CO" & COST_SUM > 500000)
+```
+  
