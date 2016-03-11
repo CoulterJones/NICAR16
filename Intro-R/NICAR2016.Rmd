@@ -1,6 +1,8 @@
 ---
 title: "Hands-on R class"
-output: html_document
+output: 
+  html_document:
+    css: lab.css
 ---
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 require(knitr)
@@ -9,7 +11,7 @@ opts_chunk$set(eval=FALSE)
 
 
 
-#### Your instructors
+## Your instructors
 This file contains all the code from the NICAR 2016 hands-on R workshop. It was created by your instructors, 
 
 Coulter Jones, coulter.jones@wsj.com
@@ -17,7 +19,7 @@ Coulter Jones, coulter.jones@wsj.com
 Amelia McNamara, amcnamara@smith.edu
 
 
-#### Some background info
+## Some background info
 
 R has a bit of a learning curve but once you get used to it, you’re off to the races. Keep in mind you will get a ton of errors while you’re learning R — in fact, you’ll still deal with errors even if you’re a master user! Google is your friend — copy and paste the error into Google and see what others have written.
 
@@ -25,7 +27,7 @@ R has a bit of a learning curve but once you get used to it, you’re off to the
 
 And don’t forget — save EVERYTHING! RStudio allows you to save your data, your scripts, your history, your entire RStudio workspace — save it all and save often.
 
-#### RStudio 
+## RStudio 
 RStudio is a great interface to the R language. The interface has 4 panes. 
 
 You’ll do your coding in the **Console** (lower left, looks like Terminal/command line). 
@@ -44,30 +46,30 @@ or
 help(mean)
 ```
 
-#### Looking for more help? 
+## Looking for more help? 
 
-##### Books
+#### Books
 - R Cookbook. Both a website, [http://www.cookbook-r.com/](http://www.cookbook-r.com/), and a book, [http://smile.amazon.com/gp/product/1449316956/](http://smile.amazon.com/gp/product/1449316956/)
 - A Compedium of Commands to Teach Statistics with R. Both a downloadedable pdf, [http://mosaic-web.org/go/Master-Core.pdf](http://mosaic-web.org/go/Master-Core.pdf), and a book, [http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889](http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889)
 - Start Teaching with R. Both a downloadable pdf, [http://mosaic-web.org/go/Master-Starting.pdf](http://mosaic-web.org/go/Master-Starting.pdf) and a book, [http://smile.amazon.com/Start-Teaching-R-Randall-Pruim/dp/0983965862/r](http://smile.amazon.com/Start-Teaching-R-Randall-Pruim/dp/0983965862/r)
 - Using R for Intro Stats: Downloadable pdf, [http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf](http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf)
 
-##### Cheatsheets 
+#### Cheatsheets 
 Do you like having something printed out and at your side at all times?
 
 - RStudio cheatsheets: [http://www.rstudio.com/resources/cheatsheets/](http://www.rstudio.com/resources/cheatsheets/) On the RStudio interface, packages (dplyr, ggplot2), RMarkdown, etc. 
 - Minimal R: [https://cran.r-project.org/web/packages/mosaic/vignettes/MinimalR.pdf](https://cran.r-project.org/web/packages/mosaic/vignettes/MinimalR.pdf)
 
-##### Website resources
+#### Website resources
 - R Cookbook. Both a website, [http://www.cookbook-r.com/](http://www.cookbook-r.com/), and a book, [http://smile.amazon.com/gp/product/1449316956/](http://smile.amazon.com/gp/product/1449316956/)
 - Quick R: [http://www.statmethods.net/](http://www.statmethods.net/)
 - R-bloggers: find out awesome things people are doing with R [http://www.r-bloggers.com/](http://www.r-bloggers.com/)
 
-##### Online learning/courses
+#### Online learning/courses
 - Johns Hopkins Coursera Course on R: [https://www.coursera.org/course/rprog](https://www.coursera.org/course/rprog). Part of the Data Science specialization, [https://www.coursera.org/specializations/jhu-data-science](https://www.coursera.org/specializations/jhu-data-science). Courses are free, but specialization costs money. 
 - DataCamp: [https://www.datacamp.com/](https://www.datacamp.com/) Interactive way to learn R in the browser. Free to start, pretty cheap to continue. 
 
-##### Searching
+#### Searching
 - R Documentation Search: [http://www.rdocumentation.org/](http://www.rdocumentation.org/)
 - Stack overflow: [http://stackoverflow.com/](http://stackoverflow.com/) You'll want to put [r] in your search box.
 
@@ -78,7 +80,7 @@ Do you like having something printed out and at your side at all times?
 
 
 
-#### Packages and syntax 
+## Packages and syntax 
 
 R has "base" functionality that is built into the language, but most of the good stuff comes from user-written "packages" that extend the language. We'll be using the `mosaic`, `ggplot2` and `dplyr` packages in this class, among others. Because R is open source (and was written by statisticians...) it has some strange features compared to other programming languages. The most obvious is that its syntax is not consistent. Almost any task you want to do, there are three ways to accomplish. And packages can contribute to this nonsense by providing their own syntax. We'll try to point to places where the code we are showing you is just one of many ways to do something, but know that when you start googling questions you may see things that don't look familiar. Don't be afraid!
 
@@ -88,7 +90,7 @@ require(mosaic)
 require(ggplot2)
 ```
 
-#### Data!
+## Data!
 Later in this class, we will show you how to load in external data, but for now we are going to begin by playing with some data that comes with R. This will allow us to start playing quickly.
 
 We'll start with some data about midwest demographics. To get started, you can read the data in with the `data()` command, and see the first few rows with `head()`.
@@ -122,7 +124,20 @@ You can also get the list of variable names using the `names()` function,
 names(midwest)
 ```
 
-#### Plotting in R
+## Changing data types
+Sometimes, the way that R has loaded in data is not exactly what we would like. In that case, we might want to change the data type. For example, `inmetro` has values of 0 and 1, with 0 meaning "not in metro" and 1 meaning "in metro." R has considered this to be `integer` data, but we would rather have it as `factor` data (R's word for categorical).
+
+```{r}
+midwest <- midwest %>%
+  mutate(inmetro = factor(inmetro))
+```
+
+To do this transformation, we are overwriting the old version of our `midwest` dataset with a new version. This change takes the original dataset, and then "pipes" the data (using the `%>%` operator) into a `mutate()` call. 
+
+1. Try running `str()` on the dataset again. What happened to `inmetro`?
+2. How would you change the variable `category` to be a factor?
+
+## Plotting in R
 Now that we have data, we can begin doing Exploratory Data Analysis, making some plots to give us a sense of the relationships in the data.
 
 Here's how we can create a scatterplot:
@@ -130,7 +145,30 @@ Here's how we can create a scatterplot:
 xyplot(popwhite~popblack, data=midwest)
 ```
 
-#### Summary statistics
+To see the distribution of one variable, try a histogram or a density plot
+```{r}
+histogram(~percprof, data=midwest)
+densityplot(~percprof, data=midwest)
+bwplot(~percprof, data=midwest)
+```
+
+Maybe you want to compare a few different groups. You could make two plots side by side,
+```{r}
+histogram(~percprof|inmetro, data=midwest)
+bwplot(~percprof|inmetro, data=midwest)
+```
+You could put two plots on the same page,
+```{r}
+densityplot(~percprof, groups=inmetro, data=midwest, auto.key=TRUE)
+bwplot(inmetro~percprof, data=midwest)
+```
+Or you could color points by another variable, 
+```{r}
+xyplot(poptotal~area, groups=inmetro, data=midwest)
+```
+
+
+## Summary statistics
 Another part of exploratory data analysis is finding summary statistics. These work much the same way as plots. 
 
 ```{r}
@@ -150,7 +188,21 @@ mean(popblack~inmetro, data=midwest)
 
 1. Do metro areas have larger percentages of whites than rural areas? How do you know?
 
-#### Sorting and ordering
+For categorical data, `tally()` is useful,
+```{r}
+tally(~inmetro, data=midwest)
+```
+And, it can be used to tally two variables together,
+```{r}
+tally(inmetro~category, data=midwest)
+```
+
+R is also fond of chaining together functions, or nesting them. So, once you've `tally`-ed your data you can use those counts to make a barchart. 
+```{r}
+barchart(tally(~category, data=midwest))
+```
+
+## Sorting and ordering
 Maybe we're working on a story about the county in the midwest that has the largest percentage of black people. We can use the `arrange()` function to see this.
 ```{r}
 midwest %>% arrange(percblack)
@@ -163,9 +215,8 @@ midwest %>% arrange(desc(percblack))
 
 2. What county has the largest American Indian population (in absolute numbers)?
 
-**More here? ** 
 
-#### Loading Data
+## Loading Data
 Most of the time, you won't be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the **Environment** pane (upper right corner), the **Import Dataset** icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the **Console** showing how it was done.
 
 ```{r}
@@ -201,14 +252,14 @@ The `median` is significantly lower than the `mean` in this case, which may indi
 histogram(~COST_SUM, data = docs)
 ```
 
-#### Quick charts with ggplot
+## Quick charts with ggplot
 Charting 
 
 
 qplot(COST_SUM, CLAIM_COUNT, data = docs)
 qplot(CLAIM_COUNT, BRAND_COUNT,  data = docs)
 
-#### Altering a data frame in R
+## Altering a data frame in R
 There is plenty to work with for this data, but let's say we want to alter it slightly and calculate additional fields. If we type equations out, the **Console** wil return the results.
 ```{r}
 2+4
@@ -245,7 +296,7 @@ head(docs)
 
 ```
 
-#### Filtering data with DPLYR
+## Filtering data with DPLYR
 Now this has been interesting, but in many cases we want to pull out specific pieces of our data. What if we're only interested in doctors in Colorado. We can do this with the `filter()` function, which is part of the `dplyr` package. Remember, if this is our first time using `dplyr` this sessione we  need to `require()` first.
 ```{r}
 require(dplyr)
@@ -280,7 +331,7 @@ Now we can view the new data set we created in our **Environment** or order by u
 head(colorado_high, 20) %>% arrange(desc(COST_SUM))
 ```
 
-#### Grouping with dplyr
+## Grouping with dplyr
 That's helpful, but what if you want to get a sense of the average salary or total number of doctors in each state. In Excel you might use a PivotTable, in SQL you'd used a "Group By"" query. In `dplyr` the syntax is very similar to SQL with the `group_by()` and `summarise()` functions.
 
 You'll do this in two steps. First, decide which variables to put in to the `group_by` function. 
