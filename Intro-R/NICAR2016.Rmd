@@ -148,10 +148,11 @@ docs <- read.csv("~/Desktop/PartD_Providers_FORCLASS.csv", header = T)
 
 To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer. Check other functionality of `?read.csv` if you have questions
 
-> Note: The way file directories are referenced in R varies between a Mac and PC. 
-MAC file directories follow this protocol use "~/file_location"
-PC versions would follow this: "C:\file_lcocation\"
-This is important to keep mind if someone shares code with you who uses a different operating system.
+> **Note:** The way file directories are referenced in R varies between a Mac and PC. 
+
+> MAC file directories follow this protocol use "~/file_location"
+
+> PC versions would follow this: "C:\file_lcocation\"
 
 Let's see what our data looks like to make sure it imported correctly. Remember, the `str()` command tells you the structure of your data.
 ```{r}
@@ -174,6 +175,14 @@ The `median` is significantly lower than the `mean` in this case, which may indi
 histogram(~COST_SUM, data = docs)
 ```
 
+#### Quick charts with ggplot
+Charting 
+
+
+qplot(COST_SUM, CLAIM_COUNT, data = docs)
+qplot(CLAIM_COUNT, BRAND_COUNT,  data = docs)
+
+#### Altering a data frame in R
 There is plenty to work with for this data, but let's say we want to alter it slightly and calculate additional fields. If we type equations out, the **Console** wil return the results.
 ```{r}
 2+4
@@ -184,17 +193,10 @@ R follows standard mathematical order of operations **(PEMDAS)**. So, this:
 2+4*3^2
 ```
 
-Will give us a different result than this.
+give us a different result than this:
 ```{r}
 (2+4)*3^2
 ```
-
-> Common R arithmetic functions
-Addition        +
-Substraction    -
-Multipication   *
-Division        /
-Exponents       ^
 
 As journalists, it's pretty rare to just be type out equations like that. However, it's not uncommon to use math on our existing data to create new fields. Take the **CLAIM_COUNT** and **BRAND_COUNT** fields. We know the total number of claims each doctor has approved and how many of those claims were filled with brand name drugs. We need to divide **BRAND_COUNT** by **CLAIM_COUNT**. We can use `mutate()` to create a field in our data called **BRAND_PCT** with this ratio.
 
@@ -206,7 +208,7 @@ and `head()` and `str()` to take a look at the data field we just created.
 ```{r}
 head(docs)
 
-str()
+str(docs)
 ```
 While the ratio is correct, we'd prefer to have it look more like a percentage by multiplying the ratio by 100. We can simply overwrite the existing data we just created.
 
@@ -217,41 +219,75 @@ head(docs)
 
 ```
 
-
 #### Filtering data with DPLYR
 Now this has been interesting, but in many cases we want to pull out specific pieces of our data. What if we're only interested in doctors in Colorado. We can do this with the `filter()` function, which is part of the `dplyr` package. Remember, if this is our first time using `dplyr` this sessione we  need to `require()` first.
 ```{r}
 require(dplyr)
 ```
 
-To find only doctors from Colorado:
-
-```{r}
-filter(docs, STATE == "CO")
-```
-
-
-`filter(data, method you want to filter on)`
-
-Using this function in this way, will simply print the results. We can also assign the results to a new dataframe.
+This is how the filter function works. `filter(data, method you want to filter on)`. If we use it will simply print the results in the **Console**. We can also assign the results to a new dataframe. To find only doctors from Colorado:
 
 ```{r}
 colorado_docs <- filter(docs, STATE == "CO")
+
+View(colorado_docs)
 ```
 
 You don't have to be limited by one variable. Earlier we looked at high-cost prescribers. Perhaps, we'd like to do that just for Colorado doctors. We can use the `&` to to look at all Colorado doctors who have
 
-```{r}
-filter(docs, STATE == "CO" & COST_SUM > 500000)
-```
+BOOLEANS review: In R we can use two types of Boolean characters 
 
- > BOOLEANS review: In R we can use two types of Boolean characters 
-AND represented by &
-OR represented by |
-& limits our filter because both criteria must be met.
-| broadens our filter. If either criteria is met the data is included.
+**AND** represented by **&**
+
+**OR** represented by **|**
+
+**&** limits our filter because both criteria must be met. **|** broadens our filter. If either criteria is met the data is included.
+
 The above code shows doctors just from Colorado who also exceeded $500,000 in costs. Below would give doctors who either are from Colorado or have a cost that exceeds $500,000 and could be from any state.
 ```{r}
-filter(docs, STATE == "CO" & COST_SUM > 500000)
+colorado_high <- filter(docs, STATE == "CO" & COST_SUM > 500000)
 ```
-  
+
+Now we can view the new data set we created in our **Environment** or order by using `arrange()` which you learned earlier
+
+```{r}
+head(colorado_high, 20) %>% arrange(desc(COST_SUM))
+```
+
+#### Grouping with dplyr
+That's helpful, but what if you want to get a sense of the average salary or total number of doctors in each state. In Excel you might use a PivotTable, in SQL you'd used a "Group By"" query. In `dplyr` the syntax is very similar to SQL with the `group_by()` and `summarise()` functions.
+
+You'll do this in two steps. First, decide which variables to put in to the `group_by` function. 
+```{r}
+state_group <- group_by(docs, STATE)
+```
+
+Then use what you just created to summarise our data and then view the result.
+```{r}
+state_docs <- summarise(state_group,
+  count = n(),
+  median_cost = median(COST_SUM)
+)
+
+state_docs
+```
+
+You can add as many summary statistics as you want. 
+
+```{r}
+state_docs <- summarise(state_group,
+  count = n(),
+  median_cost = median(COST_SUM),
+  total_cost = sum(COST_SUM),
+  high_cost = max(COST_SUM),
+  sd_cost = sd(COST_SUM),
+  median_scripts = sum(CLAIM_COUNT),
+  total_scripts = sum(CLAIM_COUNT)
+)
+```
+
+If you decided you wanted to group by more than one variable, just add it to the function, separating each variable by a comma. To group by city and state would be: 
+
+```{r}
+state_group <- group_by(docs, CITY, STATE)
+```
