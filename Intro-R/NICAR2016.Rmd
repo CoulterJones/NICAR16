@@ -2,6 +2,12 @@
 title: "Hands-on R class"
 output: html_document
 ---
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+require(knitr)
+opts_chunk$set(eval=FALSE)
+```
+
+
 
 #### Your instructors
 This file contains all the code from the NICAR 2016 hands-on R workshop. It was created by your instructors, 
@@ -40,17 +46,37 @@ help(mean)
 
 #### Looking for more help? 
 
-- The main R site: [http://cran.r-project.org/]( http://cran.r-project.org/) This has everything from guides to R updates. It also has a comprehensive list of packages and lots of great tips on how to use R. 
-- Official R Language Definition: [http://cran.r-project.org/doc/manuals/r-release/R-lang.html](http://cran.r-project.org/doc/manuals/r-release/R-lang.html)
-- An In-Depth Introduction to R: [http://cran.r-project.org/doc/contrib/usingR.pdf](http://cran.r-project.org/doc/contrib/usingR.pdf)
-- Using R for Intro Stats: [http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf](http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf)
+##### Books
+- R Cookbook. Both a website, [http://www.cookbook-r.com/](http://www.cookbook-r.com/), and a book, [http://smile.amazon.com/gp/product/1449316956/](http://smile.amazon.com/gp/product/1449316956/)
+- A Compedium of Commands to Teach Statistics with R. Both a downloadedable pdf, [http://mosaic-web.org/go/Master-Core.pdf](http://mosaic-web.org/go/Master-Core.pdf), and a book, [http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889](http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889)
+- Start Teaching with R. Both a downloadable pdf, [http://mosaic-web.org/go/Master-Starting.pdf](http://mosaic-web.org/go/Master-Starting.pdf) and a book, [http://smile.amazon.com/Start-Teaching-R-Randall-Pruim/dp/0983965862/r](http://smile.amazon.com/Start-Teaching-R-Randall-Pruim/dp/0983965862/r)
+- Using R for Intro Stats: Downloadable pdf, [http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf](http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf)
+
+##### Cheatsheets 
+Do you like having something printed out and at your side at all times?
+
+- RStudio cheatsheets: [http://www.rstudio.com/resources/cheatsheets/](http://www.rstudio.com/resources/cheatsheets/) On the RStudio interface, packages (dplyr, ggplot2), RMarkdown, etc. 
+- Minimal R: [https://cran.r-project.org/web/packages/mosaic/vignettes/MinimalR.pdf](https://cran.r-project.org/web/packages/mosaic/vignettes/MinimalR.pdf)
+
+##### Website resources
+- R Cookbook. Both a website, [http://www.cookbook-r.com/](http://www.cookbook-r.com/), and a book, [http://smile.amazon.com/gp/product/1449316956/](http://smile.amazon.com/gp/product/1449316956/)
 - Quick R: [http://www.statmethods.net/](http://www.statmethods.net/)
-- R Documentation Search: [http://www.rdocumentation.org/](http://www.rdocumentation.org/)
 - R-bloggers: find out awesome things people are doing with R [http://www.r-bloggers.com/](http://www.r-bloggers.com/)
-- Coursera Course on R: [https://www.coursera.org/course/rprog](https://www.coursera.org/course/rprog)
-- Princeton Guide to R: [http://libguides.princeton.edu/dss/R](http://libguides.princeton.edu/dss/R)
-- UCLA Guide to R: [http://www.ats.ucla.edu/stat/r/sk/books_usingr.htm](http://www.ats.ucla.edu/stat/r/sk/books_usingr.htm)
-- Stack overflow: [http://stackoverflow.com/](http://stackoverflow.com/)
+
+##### Online learning/courses
+- Johns Hopkins Coursera Course on R: [https://www.coursera.org/course/rprog](https://www.coursera.org/course/rprog). Part of the Data Science specialization, [https://www.coursera.org/specializations/jhu-data-science](https://www.coursera.org/specializations/jhu-data-science). Courses are free, but specialization costs money. 
+- DataCamp: [https://www.datacamp.com/](https://www.datacamp.com/) Interactive way to learn R in the browser. Free to start, pretty cheap to continue. 
+
+##### Searching
+- R Documentation Search: [http://www.rdocumentation.org/](http://www.rdocumentation.org/)
+- Stack overflow: [http://stackoverflow.com/](http://stackoverflow.com/) You'll want to put [r] in your search box.
+
+
+
+
+
+
+
 
 #### Packages and syntax 
 
