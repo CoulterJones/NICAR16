@@ -223,7 +223,7 @@ require(dplyr)
 Most of the time, you won't be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the **Environment** pane (upper right corner), the **Import Dataset** icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the **Console** showing how it was done.
 
 ```{r}
-docs <- read.csv("~/data/Intro_to_R/MAC/PartD_Providers_FORCLASS.csv", header = T)
+docs <- read.csv("/data/Intro_to_R/MAC/PartD_Providers_FORCLASS.csv", header = T)
 ```
 
 To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer. Check other functionality of `?read.csv` if you have questions.

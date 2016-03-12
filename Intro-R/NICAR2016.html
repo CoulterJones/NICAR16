@@ -272,7 +272,7 @@ require(dplyr)</code></pre>
 <div id="loading-data" class="section level2">
 <h2>Loading Data</h2>
 <p>Most of the time, you won’t be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the <strong>Environment</strong> pane (upper right corner), the <strong>Import Dataset</strong> icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the <strong>Console</strong> showing how it was done.</p>
-<pre class="r"><code>docs &lt;- read.csv(&quot;~/data/Intro_to_R/MAC/PartD_Providers_FORCLASS.csv&quot;, header = T)</code></pre>
+<pre class="r"><code>docs &lt;- read.csv(&quot;/data/Intro_to_R/MAC/PartD_Providers_FORCLASS.csv&quot;, header = T)</code></pre>
 <p>To import this data set, we used the <code>read.csv()</code> function. The key part of this command is making sure that you direct the command to where the file is located on your computer. Check other functionality of <code>?read.csv</code> if you have questions.</p>
 <blockquote>
 <p><strong>Note:</strong> The way file directories are referenced in R varies between a Mac and PC.</p>
