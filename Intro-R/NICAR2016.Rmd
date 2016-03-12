@@ -13,9 +13,11 @@ opts_chunk$set(eval=FALSE)
 ## Your instructors
 This file contains all the code from the NICAR 2016 hands-on R workshop. It was created by your instructors, 
 
-Coulter Jones, coulter.jones@wsj.com
+> Coulter Jones, coulter.jones@wsj.com
 
-Amelia McNamara, amcnamara@smith.edu
+> Amelia McNamara, amcnamara@smith.edu
+
+Code is available on github, [http://bit.ly/NICAR16-R](http://bit.ly/NICAR16-R) and slides on [http://bit.ly/NICAR-Rhtml](http://bit.ly/NICAR-Rhtml)
 
 
 ## Some background info
