@@ -10,7 +10,6 @@ opts_chunk$set(eval=FALSE)
 ```
 
 
-
 ## Your instructors
 This file contains all the code from the NICAR 2016 hands-on R workshop. It was created by your instructors, 
 
@@ -50,7 +49,7 @@ help(mean)
 
 #### Books
 - R Cookbook. Both a website, [http://www.cookbook-r.com/](http://www.cookbook-r.com/), and a book, [http://smile.amazon.com/gp/product/1449316956/](http://smile.amazon.com/gp/product/1449316956/)
-- A Compedium of Commands to Teach Statistics with R. Both a downloadedable pdf, [http://mosaic-web.org/go/Master-Core.pdf](http://mosaic-web.org/go/Master-Core.pdf), and a book, [http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889](http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889)
+- A Compendium of Commands to Teach Statistics with R. Both a downloadable pdf, [http://mosaic-web.org/go/Master-Core.pdf](http://mosaic-web.org/go/Master-Core.pdf), and a book, [http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889](http://smile.amazon.com/Compendium-Commands-Teach-Statistics/dp/0983965889)
 - Start Teaching with R. Both a downloadable pdf, [http://mosaic-web.org/go/Master-Starting.pdf](http://mosaic-web.org/go/Master-Starting.pdf) and a book, [http://smile.amazon.com/Start-Teaching-R-Randall-Pruim/dp/0983965862/r](http://smile.amazon.com/Start-Teaching-R-Randall-Pruim/dp/0983965862/r)
 - Using R for Intro Stats: Downloadable pdf, [http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf](http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf)
 
@@ -72,10 +71,6 @@ Do you like having something printed out and at your side at all times?
 #### Searching
 - R Documentation Search: [http://www.rdocumentation.org/](http://www.rdocumentation.org/)
 - Stack overflow: [http://stackoverflow.com/](http://stackoverflow.com/) You'll want to put [r] in your search box.
-
-
-
-
 
 
 
@@ -215,15 +210,23 @@ midwest %>% arrange(desc(percblack))
 
 2. What county has the largest American Indian population (in absolute numbers)?
 
+## Second hour of the workshop
+Make sure you have the packages loaded if you don't already.
+
+```{r}
+require(mosaic)
+require(ggplot2)
+require(dplyr)
+```
 
 ## Loading Data
 Most of the time, you won't be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the **Environment** pane (upper right corner), the **Import Dataset** icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the **Console** showing how it was done.
 
 ```{r}
-docs <- read.csv("~/Desktop/PartD_Providers_FORCLASS.csv", header = T)
+docs <- read.csv("/data/Intro_to_R/MAC/PartD_Providers_FORCLASS.csv", header = T)
 ```
 
-To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer. Check other functionality of `?read.csv` if you have questions
+To import this data set, we used the `read.csv()` function. The key part of this command is making sure that you direct the command to where the file is located on your computer. Check other functionality of `?read.csv` if you have questions.
 
 > **Note:** The way file directories are referenced in R varies between a Mac and PC. 
 
@@ -247,17 +250,48 @@ Although interesting, let's really focus in one field:*COST_SUM*. `favstats`, wh
 favstats(~COST_SUM, data=docs)
 ```
 
-The `median` is significantly lower than the `mean` in this case, which may indicates some extreme outliers on the high cost end. Making a quick histogram might show that. 
+## Quick charts with ggplot
+We see from our stats function that the **median (298,512)** is significantly lower than the **mean (401,605.7)**. We know that might be a sign of some outliers on he higher end, particularly if we read **Sarah's Cohen's Numbers in the Newsroom** [http://store.ire.org/products/numbers-in-the-newsroom-using-math-and-statistics-in-news-second-edition-e-version]. Let's chart our data to see the distribution.
+
+The `ggplot` library has many charting capabilities, but `qplot()` function is the quickest way to quickly visualize your data. Let's make a histogram of *COST_SUM*.
+
 ```{r}
-histogram(~COST_SUM, data = docs)
+qplot(COST_SUM, data = docs)
 ```
 
-## Quick charts with ggplot
-Charting 
+As a function qplot basically works like this: **qplot([x_variable], [y_variable], data = [data_frame], geom = "[geom_type]")** (Remember, use ```?qplot()``` or ```help(qplot)``` if you need help.) The function makes assumptions on the best type of chart to use. In the above example, because you only passed one variable it assumed a histogram is what is needed. We could explictly tell it to do that. 
 
+```{r}
+qplot(COST_SUM, data = docs, geom = "histogram")
+```
 
-qplot(COST_SUM, CLAIM_COUNT, data = docs)
-qplot(CLAIM_COUNT, BRAND_COUNT,  data = docs)
+The histogram is revealing, a similar type of chart is **density** which also shows the distribution.
+```{r}
+qplot(CLAIM_COUNT, data = docs, geom = "density")
+```
+
+So far we've only charted one variable. Maybe we want to look at two variables in comparison. For example, How the total claims per physician (**CLAIM_COUNT**) compares to the number of of brand name claims (**BRAND_COUNT**). 
+
+```{r}
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs)
+```
+
+Maybe, you want to look at that as line graph, instead.
+
+```{r}
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs, geom = "line")
+```
+
+That, isn't super helpful. What we really want to see is a general **smooth** line showing the general trend. 
+
+```{r}
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs, geom = "smooth")
+```
+
+Sadly, that isn't that interesting. The trend shows us the trend AND the individual plotted points to see who is above or below the general trend line. You can use the **combine function** ```c()``` to chart both.
+```{r}
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs, geom = c("point", "smooth"))
+```
 
 ## Altering a data frame in R
 There is plenty to work with for this data, but let's say we want to alter it slightly and calculate additional fields. If we type equations out, the **Console** wil return the results.
@@ -270,7 +304,7 @@ R follows standard mathematical order of operations **(PEMDAS)**. So, this:
 2+4*3^2
 ```
 
-give us a different result than this:
+gives you a different result than this:
 ```{r}
 (2+4)*3^2
 ```
@@ -282,22 +316,26 @@ docs <- mutate(docs, BRAND_PCT = BRAND_COUNT/CLAIM_COUNT)
 ```
 
 and `head()` and `str()` to take a look at the data field we just created.
+
 ```{r}
 head(docs)
 
 str(docs)
 ```
-While the ratio is correct, we'd prefer to have it look more like a percentage by multiplying the ratio by 100. We can simply overwrite the existing data we just created.
+
+5. How many doctors' claims are entirely brand name drugs?
+
+While the ratio is correct, if you'd prefer to have it look more like a percentage by multiplying the ratio by 100. We can simply overwrite the existing data we just created.
 
 ```{r}
 docs <- mutate(docs, BRAND_PCT = (BRAND_COUNT/CLAIM_COUNT)*100)
 
 head(docs)
-
 ```
 
 ## Filtering data with DPLYR
 Now this has been interesting, but in many cases we want to pull out specific pieces of our data. What if we're only interested in doctors in Colorado. We can do this with the `filter()` function, which is part of the `dplyr` package. Remember, if this is our first time using `dplyr` this sessione we  need to `require()` first.
+
 ```{r}
 require(dplyr)
 ```
@@ -321,6 +359,7 @@ BOOLEANS review: In R we can use two types of Boolean characters
 **&** limits our filter because both criteria must be met. **|** broadens our filter. If either criteria is met the data is included.
 
 The above code shows doctors just from Colorado who also exceeded $500,000 in costs. Below would give doctors who either are from Colorado or have a cost that exceeds $500,000 and could be from any state.
+
 ```{r}
 colorado_high <- filter(docs, STATE == "CO" & COST_SUM > 500000)
 ```
@@ -349,8 +388,7 @@ state_docs <- summarise(state_group,
 state_docs
 ```
 
-You can add as many summary statistics as you want. 
-
+You can add as many summary statistics as you want.
 ```{r}
 state_docs <- summarise(state_group,
   count = n(),
@@ -367,4 +405,39 @@ If you decided you wanted to group by more than one variable, just add it to the
 
 ```{r}
 state_group <- group_by(docs, CITY, STATE)
+```
+
+Then, just re-run the summarise function. 
+```{r}
+state_docs <- summarise(state_group,
+  count = n(),
+  median_cost = median(COST_SUM),
+  total_cost = sum(COST_SUM),
+  high_cost = max(COST_SUM),
+  sd_cost = sd(COST_SUM),
+  median_scripts = sum(CLAIM_COUNT),
+  total_scripts = sum(CLAIM_COUNT)
+)
+```
+
+## Other Options
+We've shown you several R functions, but keep in mind. If you Google for an answer, you may see different ways to do things. The syntax for R's base package requires users to use a **$** to separate the data frame from the variable:
+
+   **[data_frame]$[variable]**
+
+So for example, if you want to find the median of the **CLAIM_COUNT** in the **colorado_high** data frame:
+
+```{r} 
+median(colorado_high$CLAIM_COUNT)
+```
+
+Similarly, the base package comes with it's own charting library. So we can create a histogram ```hist()```
+
+```{r} 
+hist(colorado_high$CLAIM_COUNT)
+```
+
+or simply plot values ```plot(x ~ y)```:
+```{r} 
+plot(colorado_high$CLAIM_COUNT ~ colorado_high$BRAND_COUNT)
 ```
