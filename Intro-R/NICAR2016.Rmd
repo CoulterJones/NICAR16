@@ -224,6 +224,8 @@ require(dplyr)
 ## Loading Data
 Most of the time, you won't be working with data sets available through packages and will need to import data in to R. RStudio makes this very simple. On the **Environment** pane (upper right corner), the **Import Dataset** icon provides a step-by-step process to importing files. Following those steps will not only import the data, but print out the code in the **Console** showing how it was done.
 
+If you are working on the lab computers, the data is already downloaded for you. If not, you need to go find it at [bit.ly/IRE15-R](bit.ly/IRE15-R). 
+
 ```{r}
 docs <- read.csv("/data/Intro_to_R/MAC/PartD_Providers_FORCLASS.csv", header = T)
 ```
@@ -443,3 +445,27 @@ or simply plot values ```plot(x ~ y)```:
 ```{r} 
 plot(colorado_high$CLAIM_COUNT ~ colorado_high$BRAND_COUNT)
 ```
+
+## Using google to solve all your problems
+In the session, two things came up.
+- Someone wanted to change the axis labels in their `qplot()` so it wasn't scientific notation
+- Someone asked how you get comfortable doing R on your own. 
+
+The answer to both those questions is, "google." So, lets take the axis label question as an example. I didn't remember how to do this (even though I use `ggplot2` a lot), so I googled
+> change axis labels ggplot2 
+
+Looking at the results, I tried clicking on the third result, [How to format your chart and axis titles in ggplot2](http://www.r-bloggers.com/how-to-format-your-chart-and-axis-titles-in-ggplot2/). This didn't turn out to be super useful, so I changed my query to
+> change axis labels ggplot2 scientific notation
+
+In this search, the first result was [How do I change the formatting of numbers on an axis with ggplot?](http://stackoverflow.com/questions/11610377/how-do-i-change-the-formatting-of-numbers-on-an-axis-with-ggplot)
+
+I read through the question and the comments, and was reminded of the `scales` package. So, I installed it and required it
+```{r}
+install.packages("scales")
+require(scales)
+```
+Then, I tried some new code
+```{r}
+qplot(COST_SUM, data = docs, geom = "histogram") + scale_x_continuous(labels = comma) 
+```
+and that was what I wanted!
