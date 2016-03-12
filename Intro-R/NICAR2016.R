@@ -79,7 +79,12 @@ midwest %>% arrange(percblack)
 midwest %>% arrange(desc(percblack))
 
 ## ------------------------------------------------------------------------
-docs <- read.csv("~/Desktop/PartD_Providers_FORCLASS.csv", header = T)
+require(mosaic)
+require(ggplot2)
+require(dplyr)
+
+## ------------------------------------------------------------------------
+docs <- read.csv("/data/Intro_to_R/MAC/PartD_Providers_FORCLASS.csv", header = T)
 
 ## ------------------------------------------------------------------------
 str(docs)
@@ -91,7 +96,25 @@ summary(docs)
 favstats(~COST_SUM, data=docs)
 
 ## ------------------------------------------------------------------------
-histogram(~COST_SUM, data = docs)
+qplot(COST_SUM, data = docs)
+
+## ------------------------------------------------------------------------
+qplot(COST_SUM, data = docs, geom = "histogram")
+
+## ------------------------------------------------------------------------
+qplot(CLAIM_COUNT, data = docs, geom = "density")
+
+## ------------------------------------------------------------------------
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs)
+
+## ------------------------------------------------------------------------
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs, geom = "line")
+
+## ------------------------------------------------------------------------
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs, geom = "smooth")
+
+## ------------------------------------------------------------------------
+qplot(CLAIM_COUNT, BRAND_COUNT, data = docs, geom = c("point", "smooth"))
 
 ## ------------------------------------------------------------------------
 2+4
@@ -114,7 +137,6 @@ str(docs)
 docs <- mutate(docs, BRAND_PCT = (BRAND_COUNT/CLAIM_COUNT)*100)
 
 head(docs)
-
 
 ## ------------------------------------------------------------------------
 require(dplyr)
@@ -154,4 +176,24 @@ state_docs <- summarise(state_group,
 
 ## ------------------------------------------------------------------------
 state_group <- group_by(docs, CITY, STATE)
+
+## ------------------------------------------------------------------------
+state_docs <- summarise(state_group,
+  count = n(),
+  median_cost = median(COST_SUM),
+  total_cost = sum(COST_SUM),
+  high_cost = max(COST_SUM),
+  sd_cost = sd(COST_SUM),
+  median_scripts = sum(CLAIM_COUNT),
+  total_scripts = sum(CLAIM_COUNT)
+)
+
+## ------------------------------------------------------------------------
+median(colorado_high$CLAIM_COUNT)
+
+## ------------------------------------------------------------------------
+hist(colorado_high$CLAIM_COUNT)
+
+## ------------------------------------------------------------------------
+plot(colorado_high$CLAIM_COUNT ~ colorado_high$BRAND_COUNT)
 
